@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:id="@+id/day_scollview"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background="#FFFFFF" >
+	        
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/day_menu_container"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:background="#FFFFFF" >
+	    
+	    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:id="@+id/menuOne_container"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:background="#EEEEEE"
+		    android:orientation="vertical" 
+		    android:layout_margin="10dp"
+		    android:padding="10dp">
+		
+		    <TextView
+		        android:id="@+id/menuOne_header"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/text_header_menu_1"
+		        android:textStyle="bold"
+		        android:textColor="#2D2D2D" />
+		    
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="1dip"
+		        android:layout_marginBottom="10dp"
+		        android:background="#99CC00" />
+		    
+		    <TextView
+		        android:id="@+id/menuOne_appetizer"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/text_empty"
+		        android:textColor="#2D2D2D" />
+		
+		    <TextView
+		        android:id="@+id/menuOne_maincourse"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/text_empty"
+		        android:textColor="#2D2D2D" />
+		    
+		    <TextView
+		        android:id="@+id/menuOne_sidedish"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/text_empty"
+		        android:textColor="#2D2D2D" />
+		</LinearLayout>
+		
+	    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:id="@+id/menuTwo_container"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:background="#EEEEEE"
+		    android:orientation="vertical" 
+		    android:layout_margin="10dp"
+		    android:padding="10dp">
+		
+		    <TextView
+		        android:id="@+id/menuTwo_header"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/text_header_menu_2"
+		        android:textStyle="bold"
+		        android:textColor="#2D2D2D" />
+		    
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="1dip"
+		        android:layout_marginBottom="10dp"
+		        android:background="#99CC00" />
+		    
+		    <TextView
+		        android:id="@+id/menuTwo_appetizer"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/text_empty"
+		        android:textColor="#2D2D2D" />
+		
+		    <TextView
+		        android:id="@+id/menuTwo_maincourse"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/text_empty"
+		        android:textColor="#2D2D2D" />
+		    
+		    <TextView
+		        android:id="@+id/menuTwo_sidedish"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/text_empty"
+		        android:textColor="#2D2D2D" />
+		</LinearLayout>
+	    
+	    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:id="@+id/notes"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="10dp"
+		    android:textSize="12sp"
+		    android:textStyle="italic"
+		    android:text="@string/text_empty"
+		    android:textColor="#2D2D2D" />
+	</LinearLayout>
+</ScrollView>
