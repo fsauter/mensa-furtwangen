@@ -103,18 +103,27 @@ public class DownloadRssTask extends AsyncTask<String, Void, Diet> {
 	protected Menu parseMenu(String menuString) {
 		String[] menuItems = menuString.split(";");
 		
-		String appetizer = menuItems[1].trim();
-		String mainCourse = menuItems[2].trim();
-		String sideDish = "";
-		for(int i = 3; i < menuItems.length; i++) {
-			sideDish = sideDish.concat(", " + menuItems[i]);
-		}
-		sideDish = sideDish.substring(1).trim();
-		
 		Menu menu = new Menu();
-		menu.setAppetizer(appetizer);
-		menu.setMainCourse(mainCourse);
-		menu.setSideDish(sideDish);
+		menu.setAppetizer("");
+		menu.setMainCourse("");
+		menu.setSideDish("");
+		
+		if(menuItems.length > 2) { // Make sure, there is a parsable value.
+		
+			String appetizer = menuItems[1].trim();
+			String mainCourse = menuItems[2].trim();
+			String sideDish = "";
+			for(int i = 3; i < menuItems.length; i++) {
+				sideDish = sideDish.concat(", " + menuItems[i]);
+			}
+			sideDish = sideDish.substring(1).trim();
+			
+			
+			menu.setAppetizer(appetizer);
+			menu.setMainCourse(mainCourse);
+			menu.setSideDish(sideDish);
+		
+		}
 		
 		return menu;
 	}

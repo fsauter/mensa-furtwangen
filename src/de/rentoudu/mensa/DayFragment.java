@@ -34,12 +34,20 @@ public class DayFragment extends Fragment {
     	Day day = (Day) getArguments().get("day");
     	
     	menuOneAppetizer.setText(day.getMenuOne().getAppetizer());
-    	menuOnemainCourse.setText(day.getMenuOne().getMainCourse());
     	menuOneSideDish.setText(day.getMenuOne().getSideDish());
+    	if(day.getMenuOne().getMainCourse() == "") {
+    		menuOnemainCourse.setText(getString(R.string.text_menu_no_offer));
+    	} else {
+    		menuOnemainCourse.setText(day.getMenuOne().getMainCourse());
+    	}
     	
     	menuTwoAppetizer.setText(day.getMenuTwo().getAppetizer());
-    	menuTwomainCourse.setText(day.getMenuTwo().getMainCourse());
     	menuTwoSideDish.setText(day.getMenuTwo().getSideDish());
+    	if(day.getMenuTwo().getMainCourse() == "") {
+    		menuTwomainCourse.setText(getString(R.string.text_menu_no_offer));
+    	} else {
+    		menuTwomainCourse.setText(day.getMenuTwo().getMainCourse());
+    	}
     	
     	notes.setText(day.getNotes());
     	

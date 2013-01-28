@@ -109,7 +109,7 @@ public class MainActivity extends FragmentActivity {
 			return new DownloadRssTask().execute(firstWeekFeedUrl, secondWeekFeedUrl).get();
 		} catch (Exception e) {
 			showToast(e.getMessage());
-			return null;
+			return new Diet();
 		}
     }
     

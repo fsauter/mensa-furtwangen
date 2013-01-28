@@ -17,6 +17,8 @@
     <string name="text_header_menu_1">Menu 1</string>
     <string name="text_header_menu_2">Menu 2</string>
     
+    <string name="text_menu_no_offer">No offer.</string>
+    
     <string name="text_about">Created by Florian Sauter (Furtwangen University SPB). Data provided by SWFR.</string>
     <string name="text_diet_synced">Menu has been updated.</string>
     <string name="text_empty">-</string>
