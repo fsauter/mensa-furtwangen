@@ -43,7 +43,7 @@ public class DayPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return diet.getDays().size();
+        return diet.getDays() == null ? 0 : diet.getDays().size();
     }
 
     @Override

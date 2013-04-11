@@ -23,5 +23,7 @@
     <string name="text_diet_synced">Menu has been updated.</string>
     <string name="text_diet_fetch">Fetching menu</string>
     <string name="text_empty">-</string>
+    
+    <string name="error_diet_fetch">Sry, no connection.</string>
 
 </resources>

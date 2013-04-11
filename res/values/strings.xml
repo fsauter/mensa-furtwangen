@@ -21,7 +21,9 @@
     
     <string name="text_about">Erstellt von Florian Sauter (Hochschule Furtwangen SPB). Daten von SWFR.</string>
     <string name="text_diet_synced">Speiseplan wurde aktualisiert.</string>
-    <string name="text_diet_fetch">Aktualisiere Speiseplan...</string>
+    <string name="text_diet_fetch">Aktualisiere Speiseplan.</string>
     <string name="text_empty">-</string>
+    
+     <string name="error_diet_fetch">Sry, keine Internetverbindung.</string>
 
 </resources>

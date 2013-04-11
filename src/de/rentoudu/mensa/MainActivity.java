@@ -1,14 +1,8 @@
 package de.rentoudu.mensa;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Calendar;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -21,7 +15,6 @@ import de.rentoudu.mensa.rss.DownloadRssTask;
 public class MainActivity extends FragmentActivity {
 
 	private static final String FEED_URL = "http://www.swfr.de/essen-trinken/speiseplaene/speiseplan-rss/?no_cache=1&Tag={day}&Ort_ID=641";
-	private static final String DIET_FILE = "diet_offline";
 	
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -38,40 +31,20 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-        Diet diet = loadDietFromInternalStorage();
-        if(diet == null) {
-        	// Never instantiated activity.
-        	diet = fetchDiet();
-        	saveDiet(diet);
-        } else {
-        	
-        	// AUTO UPDATE LOGIC
-        	Calendar currentDate = Calendar.getInstance();
-        	Calendar lastSyncedDate = Calendar.getInstance();
-        	lastSyncedDate.setTime(diet.getLastSynced());
-        	
-            if(
-            	// New year, update app.
-            	( currentDate.get(Calendar.YEAR)  != lastSyncedDate.get(Calendar.YEAR) )
-            	// New week, update app.
-            	|| ( currentDate.get(Calendar.WEEK_OF_YEAR)  > lastSyncedDate.get(Calendar.WEEK_OF_YEAR) )
-            ) {
-            	diet = fetchDiet();
-            	saveDiet(diet);
-            } else {
-            	// Nothing to update.
-            }
-            
-        }
-        
-       // Create the adapter that will return a DayFragment for each of the pages.
-        dayPagerAdapter = new DayPagerAdapter(diet, getResources(), getSupportFragmentManager());
+        Diet diet = fetchDiet();
+		if (diet == null) {
+			showToast(getString(R.string.error_diet_fetch));
+		} else {
+			// Create the adapter that will return a DayFragment for each of the
+			// pages.
+			dayPagerAdapter = new DayPagerAdapter(diet, getResources(),
+					getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(dayPagerAdapter);
-        viewPager.setCurrentItem(getCurrentDayIndex());
+			// Set up the ViewPager with the sections adapter.
+			viewPager = (ViewPager) findViewById(R.id.pager);
+			viewPager.setAdapter(dayPagerAdapter);
+			viewPager.setCurrentItem(getCurrentDayIndex());
+		}
     }
     
     /**
@@ -127,41 +100,8 @@ public class MainActivity extends FragmentActivity {
      */
     protected void updateDiet() {
     	Diet diet = fetchDiet();
-    	saveDiet(diet);
     	displayDiet(diet);
     	showToast(getString(R.string.text_diet_synced));
-    }
-    
-    /**
-     * Saves the passed diet using the internal storage.
-     */
-    protected boolean saveDiet(Diet diet) {
-    	try {
-			FileOutputStream fos = openFileOutput(DIET_FILE, Context.MODE_PRIVATE);
-			ObjectOutputStream os = new ObjectOutputStream(fos);
-			os.writeObject(diet);
-		    os.close();
-		    fos.close();
-		    return true;
-		} catch (Exception e) {
-			showToast(e.getMessage());
-			return false;
-		}
-    }
-    
-    /**
-     * Loads the diet from the internal storage.
-     */
-    protected Diet loadDietFromInternalStorage() {
-    	try {
-    		FileInputStream fis = openFileInput(DIET_FILE);
-        	ObjectInputStream is = new ObjectInputStream(fis);
-        	Diet diet = (Diet) is.readObject();
-			is.close();
-			return diet;
-		} catch (Exception e) {
-			return null;
-		}
     }
 
 	/**
