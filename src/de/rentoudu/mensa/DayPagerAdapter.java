@@ -49,18 +49,19 @@ public class DayPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
     	Day day = diet.getDays().get(position);
+    	int weekDay =  day.getDay();
     	int week =  day.getWeek();
     	switch (day.getDay()) {
             case Calendar.MONDAY:
-                return resources.getString(R.string.weekday_mo).toUpperCase(Locale.GERMAN) + " (" + week + ")";
+                return resources.getString(R.string.weekday_mo).toUpperCase(Locale.GERMAN) + " (" + Utils.getFormattedDateForWeekDay(week, weekDay) + ")";
             case Calendar.TUESDAY:
-            	return resources.getString(R.string.weekday_tu).toUpperCase(Locale.GERMAN) + " (" + week + ")";
+            	return resources.getString(R.string.weekday_tu).toUpperCase(Locale.GERMAN) + " (" + Utils.getFormattedDateForWeekDay(week, weekDay) + ")";
             case Calendar.WEDNESDAY:
-            	return resources.getString(R.string.weekday_we).toUpperCase(Locale.GERMAN) + " (" + week + ")";
+            	return resources.getString(R.string.weekday_we).toUpperCase(Locale.GERMAN) + " (" + Utils.getFormattedDateForWeekDay(week, weekDay) + ")";
             case Calendar.THURSDAY:
-            	return resources.getString(R.string.weekday_th).toUpperCase(Locale.GERMAN) + " (" + week + ")";
+            	return resources.getString(R.string.weekday_th).toUpperCase(Locale.GERMAN) + " (" + Utils.getFormattedDateForWeekDay(week, weekDay) + ")";
             case Calendar.FRIDAY:
-            	return resources.getString(R.string.weekday_fr).toUpperCase(Locale.GERMAN) + " (" + week + ")";
+            	return resources.getString(R.string.weekday_fr).toUpperCase(Locale.GERMAN) + " (" + Utils.getFormattedDateForWeekDay(week, weekDay) + ")";
         }
         return null;
     }

@@ -21,6 +21,7 @@
     
     <string name="text_about">Created by Florian Sauter (Furtwangen University SPB). Data provided by SWFR.</string>
     <string name="text_diet_synced">Menu has been updated.</string>
+    <string name="text_diet_fetch">Fetching menu</string>
     <string name="text_empty">-</string>
 
 </resources>
