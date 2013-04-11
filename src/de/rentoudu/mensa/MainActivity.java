@@ -100,8 +100,13 @@ public class MainActivity extends FragmentActivity {
      */
     protected void updateDiet() {
     	Diet diet = fetchDiet();
-    	displayDiet(diet);
-    	showToast(getString(R.string.text_diet_synced));
+    	if(diet == null) {
+    		showToast(getString(R.string.error_diet_fetch));
+    	} else {
+    		displayDiet(diet);
+        	showToast(getString(R.string.text_diet_synced));
+    	}
+    	
     }
 
 	/**
