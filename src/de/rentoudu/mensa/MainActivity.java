@@ -78,7 +78,11 @@ public class MainActivity extends FragmentActivity {
      * Returns the current day index.
      */
     protected int getCurrentDayIndex() {
-		return Utils.getDay() - 2; // -2 because an we want to start counting with 0
+    	int dateBalancer = -2;
+    	if(Utils.isAfter(13, 40)) {
+    		dateBalancer = -1;
+    	}
+		return Utils.getDay() + dateBalancer; // by default -2 because an we want to start counting with 0
     }
     
 	/**

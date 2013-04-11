@@ -1,8 +1,10 @@
 package de.rentoudu.mensa;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class Utils {
@@ -30,6 +32,18 @@ public class Utils {
 	
 	public static int getYear() {
 		return getCalendar().get(Calendar.YEAR);
+	}
+	
+	public static boolean isAfter(int hour, int minute) {
+		try {
+			SimpleDateFormat parser = new SimpleDateFormat("HH:mm", Locale.getDefault());
+			Date closingDate = parser.parse(hour + ":" + minute);
+			Date currentDate = new Date();
+			return currentDate.after(closingDate);
+		} catch (ParseException e) {
+			return false;
+		}
+		
 	}
 	
 	public static Calendar getCalendar() {
