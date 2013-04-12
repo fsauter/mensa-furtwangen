@@ -41,7 +41,10 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		dayPagerAdapter = new DayPagerAdapter(getResources(), getSupportFragmentManager());
+		
 		// Check if stored diet null.
 		if (diet == null) {
 			diet = fetchDiet();
@@ -51,13 +54,10 @@ public class MainActivity extends FragmentActivity {
 		if (diet == null) {
 			showToast(getString(R.string.error_diet_fetch));
 		} else {
+			dayPagerAdapter.setDiet(diet);
 			// Create the adapter that will return a DayFragment for each of the
 			// pages.
-			dayPagerAdapter = new DayPagerAdapter(diet, getResources(),
-					getSupportFragmentManager());
-
 			// Set up the ViewPager with the sections adapter.
-			viewPager = (ViewPager) findViewById(R.id.pager);
 			viewPager.setAdapter(dayPagerAdapter);
 			viewPager.setCurrentItem(getCurrentDayIndex());
 		}
@@ -69,6 +69,7 @@ public class MainActivity extends FragmentActivity {
 	protected int getCurrentDayIndex() {
 		// by default -2 because an we want to start counting with 0
 		int dateBalancer = -2;
+		// Have a look at the closing date.
 		if (Utils.isAfter(13, 40)) {
 			dateBalancer = -1;
 		}
@@ -79,9 +80,11 @@ public class MainActivity extends FragmentActivity {
 	 * Refreshes the view.
 	 */
 	protected void refreshView() {
-		dayPagerAdapter.setDiet(diet);
-		viewPager.setAdapter(dayPagerAdapter);
-		viewPager.setCurrentItem(getCurrentDayIndex());
+		if(diet != null) {
+			dayPagerAdapter.setDiet(diet);
+			viewPager.setAdapter(dayPagerAdapter);
+			viewPager.setCurrentItem(getCurrentDayIndex());
+		}
 	}
 
 	/**
@@ -97,7 +100,6 @@ public class MainActivity extends FragmentActivity {
 	 * @see DownloadRssTask#parseRss(InputStream)
 	 */
 	protected Diet fetchDiet() {
-		showToast(getString(R.string.text_diet_fetch));
 		try {
 			String firstWeekFeedUrl = buildFeedUrl(-getCurrentDayIndex());
 			String secondWeekFeedUrl = buildFeedUrl(-getCurrentDayIndex() + 7);

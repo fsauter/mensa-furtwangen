@@ -21,9 +21,8 @@ public class DayPagerAdapter extends FragmentPagerAdapter {
 	private Resources resources;
 	private Diet diet;
 	
-    public DayPagerAdapter(Diet diet, Resources resources, FragmentManager fm) {
+    public DayPagerAdapter(Resources resources, FragmentManager fm) {
         super(fm);
-        this.diet = diet;
         this.resources = resources;
     }
     
@@ -33,6 +32,10 @@ public class DayPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
     public Fragment getItem(int position) {
+		if(diet == null) {
+    		return null;
+    	}
+		
     	DayFragment fragment = new DayFragment();
     	Day day = diet.getDays().get(position);
     	Bundle args = new Bundle();
@@ -43,11 +46,15 @@ public class DayPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return diet.getDays() == null ? 0 : diet.getDays().size();
+        return diet == null ? 0 : diet.getDays().size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
+    	if(diet == null) {
+    		return "";
+    	}
+    	
     	Day day = diet.getDays().get(position);
     	int weekDay =  day.getDay();
     	int week =  day.getWeek();
