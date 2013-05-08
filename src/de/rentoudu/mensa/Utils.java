@@ -1,7 +1,6 @@
 package de.rentoudu.mensa;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,33 +16,31 @@ public class Utils {
 		return getCalendar().get(Calendar.WEEK_OF_YEAR);
 	}
 	
-	public static String getFormattedDateForWeekDay(int week, int day) {
-		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-		SimpleDateFormat simpleDateFormat = (SimpleDateFormat) dateFormat;
-		Calendar calendar = getCalendar();
-		calendar.set(Calendar.WEEK_OF_YEAR, week);        
-		calendar.set(Calendar.DAY_OF_WEEK, day);
-		String date = simpleDateFormat.format(calendar.getTime());
-		String longYear = String.valueOf(getYear());
-		String shortYear = String.valueOf(getYear()).replace("20", "");
-		String customizedDate = date.replace(longYear, shortYear);
-		return customizedDate;
-	}
-	
 	public static int getYear() {
 		return getCalendar().get(Calendar.YEAR);
 	}
 	
-	public static boolean isAfter(int hour, int minute) {
+	public static String getFormattedDate(String unformattedDate) {
+		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+		SimpleDateFormat simpleDateFormat = (SimpleDateFormat) dateFormat;
+		Date date;
 		try {
-			SimpleDateFormat parser = new SimpleDateFormat("HH:mm", Locale.getDefault());
-			Date closingDate = parser.parse(hour + ":" + minute);
-			Date currentDate = new Date();
-			return currentDate.after(closingDate);
-		} catch (ParseException e) {
-			return false;
+			date = new SimpleDateFormat("E, d.M.y", Locale.GERMANY).parse(unformattedDate);
+		} catch (Exception e) {
+			date = new Date();
 		}
-		
+		String formattedDate = simpleDateFormat.format(date);
+		return formattedDate;
+	}
+	
+	public static boolean isAfter(int hour, int minute) {
+		Calendar calendar = getCalendar();
+		calendar.set(Calendar.HOUR_OF_DAY, hour);
+		calendar.set(Calendar.MINUTE, minute);
+		calendar.set(Calendar.SECOND, 0);
+		Date closingDate = calendar.getTime();
+		Date currentDate = new Date();
+		return currentDate.after(closingDate);
 	}
 	
 	public static Calendar getCalendar() {

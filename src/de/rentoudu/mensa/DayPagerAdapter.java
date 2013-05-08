@@ -46,7 +46,7 @@ public class DayPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return diet == null ? 0 : diet.getDays().size();
+    	return diet == null ? 0 : diet.getDays().size();
     }
 
     @Override
@@ -56,20 +56,36 @@ public class DayPagerAdapter extends FragmentPagerAdapter {
     	}
     	
     	Day day = diet.getDays().get(position);
+    	String guid = day.getGuid();
     	int weekDay =  day.getDay();
-    	int week =  day.getWeek();
-    	switch (day.getDay()) {
+    	
+    	String pageTitle = "EMPTY";
+    	
+    	switch (weekDay) {
             case Calendar.MONDAY:
-                return resources.getString(R.string.weekday_mo).toUpperCase(Locale.GERMAN) + " (" + Utils.getFormattedDateForWeekDay(week, weekDay) + ")";
+            	pageTitle = getPageTitle(R.string.weekday_mo, guid);
+            	break;
             case Calendar.TUESDAY:
-            	return resources.getString(R.string.weekday_tu).toUpperCase(Locale.GERMAN) + " (" + Utils.getFormattedDateForWeekDay(week, weekDay) + ")";
+            	pageTitle = getPageTitle(R.string.weekday_tu, guid);
+            	break;
             case Calendar.WEDNESDAY:
-            	return resources.getString(R.string.weekday_we).toUpperCase(Locale.GERMAN) + " (" + Utils.getFormattedDateForWeekDay(week, weekDay) + ")";
+            	pageTitle = getPageTitle(R.string.weekday_we, guid);
+            	break;
             case Calendar.THURSDAY:
-            	return resources.getString(R.string.weekday_th).toUpperCase(Locale.GERMAN) + " (" + Utils.getFormattedDateForWeekDay(week, weekDay) + ")";
+            	pageTitle = getPageTitle(R.string.weekday_th, guid);
+            	break;
             case Calendar.FRIDAY:
-            	return resources.getString(R.string.weekday_fr).toUpperCase(Locale.GERMAN) + " (" + Utils.getFormattedDateForWeekDay(week, weekDay) + ")";
-        }
-        return null;
+            	pageTitle = getPageTitle(R.string.weekday_fr, guid);
+            	break;
+            default:
+            	pageTitle = "UNKOWN";
+            	break;
+    	}
+
+        return pageTitle;
+    }
+    
+    private String getPageTitle(int dayName, String guid) {
+    	return resources.getString(dayName).toUpperCase(Locale.GERMANY) + " (" + Utils.getFormattedDate(guid) + ")";
     }
 }

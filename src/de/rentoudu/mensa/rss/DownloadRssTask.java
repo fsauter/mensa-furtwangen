@@ -58,8 +58,10 @@ public class DownloadRssTask extends AsyncTask<String, Void, Diet> {
 		NodeList itemElements = document.getElementsByTagName("item");
 		for (int i = 0; i < 5; i++) { // NO WEEKEND DAYS (SATURDAY)
 			Element itemElement = (Element) itemElements.item(i);
+			String title = itemElement.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
+			String guid = itemElement.getElementsByTagName("guid").item(0).getFirstChild().getNodeValue();
 			String description = itemElement.getElementsByTagName("description").item(0).getFirstChild().getNodeValue();
-			
+
 			// Clear the CDATA and use delimiter ;
 			description = description.replace("\n", "").replace("\r", "").replace("\t", "");
 	        description = description.replaceAll("<u></u>", "");
@@ -92,6 +94,8 @@ public class DownloadRssTask extends AsyncTask<String, Void, Diet> {
 			day.setMenuOne(menuOne);
 			day.setMenuTwo(menuTwo);
 			day.setNotes(notes);
+			day.setTitle(title);
+			day.setGuid(guid);
 
 			diet.addDay(day);
 		}

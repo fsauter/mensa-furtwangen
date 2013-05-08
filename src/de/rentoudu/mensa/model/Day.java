@@ -8,6 +8,9 @@ public class Day implements Serializable {
 	private int week;
 	private int day;
 	
+	private String title;
+	private String guid;
+	
 	private Menu menuOne;
 	private Menu menuTwo;
 	
@@ -53,6 +56,22 @@ public class Day implements Serializable {
 	
 	public String getNotes() {
 		return notes;
+	}
+	
+	public String getGuid() {
+		return guid;
+	}
+	
+	public void setGuid(String guid) {
+		this.guid = guid;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 }
