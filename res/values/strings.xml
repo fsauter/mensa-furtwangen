@@ -19,7 +19,7 @@
     
     <string name="text_menu_no_offer">Kein Angebot.</string>
     
-    <string name="text_about">Erstellt von Florian Sauter (Hochschule Furtwangen SPB). Daten von SWFR.</string>
+    <string name="text_about">\u00A9 Florian Sauter 2013\nSoftware Produktmanagement\nHochschule Furtwangen\nDaten von SWFR.\nVersion: <b>%1$s</b></string>
     <string name="text_diet_synced">Speiseplan wurde aktualisiert.</string>
     <string name="text_diet_fetch">Aktualisiere Speiseplan.</string>
     <string name="text_empty">-</string>

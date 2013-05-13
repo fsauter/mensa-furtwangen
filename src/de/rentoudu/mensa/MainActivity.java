@@ -3,6 +3,9 @@ package de.rentoudu.mensa;
 import java.io.InputStream;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -145,9 +148,23 @@ public class MainActivity extends FragmentActivity {
 			updateDiet();
 			return true;
 		case R.id.menu_about:
+			String version = "-";
+			try {
+				PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+				version = packageInfo.versionName;
+			} catch (NameNotFoundException e) {
+				// Nothing to do.
+			}
+			String message = String.format(getString(R.string.text_about), version);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(R.string.text_about)
-					.setTitle(R.string.menu_about).create().show();
+			builder.setMessage(message)
+				.setTitle(R.string.menu_about)
+				.setNeutralButton(android.R.string.ok,
+		            new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}
+				}).create().show();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

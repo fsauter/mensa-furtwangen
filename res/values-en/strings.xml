@@ -19,7 +19,7 @@
     
     <string name="text_menu_no_offer">No offer.</string>
     
-    <string name="text_about">Created by Florian Sauter (Furtwangen University SPB). Data provided by SWFR.</string>
+    <string name="text_about"><b>\u00A9 Florian Sauter 2013</b>\nSoftware Product Management\nFurtwangen University\nData provided by SWFR.\nVersion: <b>%1$s</b></string>
     <string name="text_diet_synced">Menu has been updated.</string>
     <string name="text_diet_fetch">Fetching menu</string>
     <string name="text_empty">-</string>
