@@ -1,21 +1,22 @@
 package de.rentoudu.mensa;
 
-import de.rentoudu.mensa.model.Day;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import de.rentoudu.mensa.model.Day;
+import de.rentoudu.mensa.model.Menu;
 
 /**
- * A dummy fragment representing a section of the app, but that simply
- * displays dummy text.
+ * The fragment representing both menus and the rating bar.
  */
 public class DayFragment extends Fragment {
 
-	public DayFragment() {
-	}
+	private RatingBarController menuOneRatingBarController;
+	private RatingBarController menuTwoRatingBarController;
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,25 +33,41 @@ public class DayFragment extends Fragment {
     	TextView notes = (TextView) view.findViewById(R.id.notes);
     	
     	Day day = (Day) getArguments().get("day");
+    	Menu menuOne = day.getMenuOne();
+    	Menu menuTwo = day.getMenuTwo();
     	
-    	menuOneAppetizer.setText(day.getMenuOne().getAppetizer());
-    	menuOneSideDish.setText(day.getMenuOne().getSideDish());
-    	if(day.getMenuOne().getMainCourse() == "") {
+    	menuOneAppetizer.setText(menuOne.getAppetizer());
+    	menuOneSideDish.setText(menuOne.getSideDish());
+    	if(menuOne.getMainCourse() == "") {
     		menuOnemainCourse.setText(getString(R.string.text_menu_no_offer));
     	} else {
-    		menuOnemainCourse.setText(day.getMenuOne().getMainCourse());
+    		menuOnemainCourse.setText(menuOne.getMainCourse());
     	}
     	
-    	menuTwoAppetizer.setText(day.getMenuTwo().getAppetizer());
-    	menuTwoSideDish.setText(day.getMenuTwo().getSideDish());
-    	if(day.getMenuTwo().getMainCourse() == "") {
+    	menuTwoAppetizer.setText(menuTwo.getAppetizer());
+    	menuTwoSideDish.setText(menuTwo.getSideDish());
+    	if(menuTwo.getMainCourse() == "") {
     		menuTwomainCourse.setText(getString(R.string.text_menu_no_offer));
     	} else {
-    		menuTwomainCourse.setText(day.getMenuTwo().getMainCourse());
+    		menuTwomainCourse.setText(menuTwo.getMainCourse());
     	}
     	
     	notes.setText(day.getNotes());
     	
+    	// Rating bar
+    	RatingBar menuOneRatingBar = (RatingBar) view.findViewById(R.id.menuOne_ratingBar);
+    	RatingBar menuTwoRatingBar = (RatingBar) view.findViewById(R.id.menuTwo_ratingBar);
+    	
+    	menuOneRatingBarController = new RatingBarController(this, menuOneRatingBar, menuOne);
+    	menuTwoRatingBarController = new RatingBarController(this, menuTwoRatingBar, menuTwo);
+    	
+    	menuOneRatingBar.setOnTouchListener(menuOneRatingBarController);
+    	menuTwoRatingBar.setOnTouchListener(menuTwoRatingBarController);
+    	
+    	menuOneRatingBarController.refresh();
+    	menuTwoRatingBarController.refresh();
+    	
         return view;
     }
+    
 }

@@ -1,4 +1,4 @@
-package de.rentoudu.mensa.rss;
+package de.rentoudu.mensa.task;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,7 +121,6 @@ public class DownloadRssTask extends AsyncTask<String, Void, Diet> {
 				sideDish = sideDish.concat(", " + menuItems[i]);
 			}
 			sideDish = sideDish.substring(1).trim();
-			
 			
 			menu.setAppetizer(appetizer);
 			menu.setMainCourse(mainCourse);

@@ -23,6 +23,15 @@
     <string name="text_diet_synced">Menu has been updated.</string>
     <string name="text_diet_fetch">Fetching menu</string>
     <string name="text_empty">-</string>
+    <string name="text_ok">OK</string>
+    <string name="text_cancel">Cancel</string>
+    
+    <string name="rating_header">Rate this menu</string>
+    <string name="rating_5">Excellent</string>
+    <string name="rating_4">Above Average</string>
+    <string name="rating_3">Average</string>
+    <string name="rating_2">Below Average</string>
+    <string name="rating_1">Poor</string>
     
     <string name="error_diet_fetch">Sry, no connection.</string>
 

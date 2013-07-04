@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import de.rentoudu.mensa.model.Diet;
-import de.rentoudu.mensa.rss.DownloadRssTask;
+import de.rentoudu.mensa.task.DownloadRssTask;
 
 /**
  * The main activity.

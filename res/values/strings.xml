@@ -23,6 +23,15 @@
     <string name="text_diet_synced">Speiseplan wurde aktualisiert.</string>
     <string name="text_diet_fetch">Aktualisiere Speiseplan.</string>
     <string name="text_empty">-</string>
+    <string name="text_ok">OK</string>
+    <string name="text_cancel">Abbrechen</string>
+    
+    <string name="rating_header">Menü bewerten</string>
+    <string name="rating_5">Ausgezeichnet</string>
+    <string name="rating_4">Über­durch­schnitt­lich</string>
+    <string name="rating_3">Durchschnittlich</string>
+    <string name="rating_2">Unterdurchschnittlich</string>
+    <string name="rating_1">Schlecht</string>
     
      <string name="error_diet_fetch">Sry, keine Internetverbindung.</string>
 
