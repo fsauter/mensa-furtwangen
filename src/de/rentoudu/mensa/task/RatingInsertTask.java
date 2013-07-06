@@ -7,6 +7,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.ratings.Ratings;
 import com.google.api.services.ratings.model.Rating;
 
+import de.rentoudu.mensa.R;
 import de.rentoudu.mensa.RatingBarController;
 
 public class RatingInsertTask extends RatingTask<Rating, Void, Boolean>{
@@ -33,7 +34,11 @@ public class RatingInsertTask extends RatingTask<Rating, Void, Boolean>{
 		if(result) {
 			getActiveController().refresh();
 		} else {
-			Toast.makeText(getActiveController().getActivity().getApplicationContext(), "Could not insert rating, sry.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(
+					getActiveController().getActivity().getApplicationContext(),
+					getActiveController().getActivity().getText(
+							R.string.rating_insert_failed), Toast.LENGTH_SHORT)
+					.show();
 		}
 	}
 	

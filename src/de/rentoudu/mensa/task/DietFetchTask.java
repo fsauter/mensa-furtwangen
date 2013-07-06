@@ -15,16 +15,37 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
+import de.rentoudu.mensa.MainActivity;
+import de.rentoudu.mensa.R;
 import de.rentoudu.mensa.Utils;
 import de.rentoudu.mensa.model.Day;
 import de.rentoudu.mensa.model.Diet;
 import de.rentoudu.mensa.model.Menu;
 
-public class DownloadRssTask extends AsyncTask<String, Void, Diet> {
+public class DietFetchTask extends AsyncTask<String, Void, Diet> {
 
+	private NotificationCompat.Builder notificationBuilder;
+	private NotificationManager notificationManager;
+	private MainActivity activity;
+	
+	public DietFetchTask(MainActivity mainActivity) {
+		this.activity = mainActivity;
+		this.notificationBuilder = new NotificationCompat.Builder(activity);
+		this.notificationManager = (NotificationManager) getActivity()
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+	}
+	
 	@Override
 	protected Diet doInBackground(String... urls) {
+		
+		startNotification(); // Ends in onPostExecute(..)
+		
 		try {
 			InputStream firstWeekStream = fetchRss(urls[0]);
 			InputStream secondWeekStream = fetchRss(urls[1]);
@@ -46,6 +67,16 @@ public class DownloadRssTask extends AsyncTask<String, Void, Diet> {
 		}
 	}
 
+	@Override
+	protected void onPostExecute(Diet result) {
+		if(result == null) {
+			endNotification(false);
+		} else {
+			getActivity().update(result);
+			endNotification(true);
+		}
+	}
+	
 	protected Diet parseRss(InputStream in, boolean isSecondWeek) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -144,5 +175,29 @@ public class DownloadRssTask extends AsyncTask<String, Void, Diet> {
 		conn.connect();
 		InputStream stream = conn.getInputStream();
 		return stream;
+	}
+	
+	public void startNotification() {
+		Intent intent = new Intent(getActivity(), MainActivity.class);
+		PendingIntent pIntent = PendingIntent.getActivity(getActivity(), 0, intent, 0);
+		notificationBuilder.setContentIntent(pIntent);
+		notificationBuilder.setContentTitle(getActivity().getString(R.string.notification_updating_menu_title))
+				.setContentText(getActivity().getString(R.string.notification_updating_menu_text))
+				.setSmallIcon(R.drawable.ic_notification_sync)
+				.setProgress(0, 0, true);
+		notificationManager.notify(0, notificationBuilder.build());
+	}
+	
+	public void endNotification(boolean success) {
+		notificationManager.cancel(0);
+		if(success) {
+			//getActivity().showToast(getActivity().getString(R.string.text_diet_synced));
+		} else {
+			getActivity().showToast(getActivity().getString(R.string.error_diet_fetch));
+		}
+	}
+	
+	public MainActivity getActivity() {
+		return activity;
 	}
 }

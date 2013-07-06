@@ -1,7 +1,5 @@
 package de.rentoudu.mensa;
 
-import java.io.InputStream;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
@@ -13,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import de.rentoudu.mensa.model.Diet;
-import de.rentoudu.mensa.task.DownloadRssTask;
+import de.rentoudu.mensa.task.DietFetchTask;
 
 /**
  * The main activity.
@@ -48,22 +46,7 @@ public class MainActivity extends FragmentActivity {
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		dayPagerAdapter = new DayPagerAdapter(getResources(), getSupportFragmentManager());
 		
-		// Check if stored diet null.
-		if (diet == null) {
-			diet = fetchDiet();
-		}
-
-		// Check if fetched diet null.
-		if (diet == null) {
-			showToast(getString(R.string.error_diet_fetch));
-		} else {
-			dayPagerAdapter.setDiet(diet);
-			// Create the adapter that will return a DayFragment for each of the
-			// pages.
-			// Set up the ViewPager with the sections adapter.
-			viewPager.setAdapter(dayPagerAdapter);
-			viewPager.setCurrentItem(getCurrentDayIndex());
-		}
+		refresh();
 	}
 
 	/**
@@ -78,16 +61,17 @@ public class MainActivity extends FragmentActivity {
 		}
 		return Utils.getDay() + dateBalancer;
 	}
-
-	/**
-	 * Refreshes the view.
-	 */
-	protected void refreshView() {
-		if(diet != null) {
-			dayPagerAdapter.setDiet(diet);
-			viewPager.setAdapter(dayPagerAdapter);
-			viewPager.setCurrentItem(getCurrentDayIndex());
-		}
+	
+	public void refresh() {
+		String firstWeekFeedUrl = buildFeedUrl(-getCurrentDayIndex());
+		String secondWeekFeedUrl = buildFeedUrl(-getCurrentDayIndex() + 7);
+		new DietFetchTask(this).execute(firstWeekFeedUrl, secondWeekFeedUrl);
+	}
+	
+	public void update(Diet diet) {
+		dayPagerAdapter.setDiet(diet);
+		viewPager.setAdapter(dayPagerAdapter);
+		viewPager.setCurrentItem(getCurrentDayIndex());
 	}
 
 	/**
@@ -95,41 +79,6 @@ public class MainActivity extends FragmentActivity {
 	 */
 	protected String buildFeedUrl(int startDay) {
 		return FEED_URL.replace("{day}", String.valueOf(startDay));
-	}
-
-	/**
-	 * Loads the remote RSS file and parses the current diet.
-	 * 
-	 * @see DownloadRssTask#parseRss(InputStream)
-	 */
-	protected Diet fetchDiet() {
-		try {
-			String firstWeekFeedUrl = buildFeedUrl(-getCurrentDayIndex());
-			String secondWeekFeedUrl = buildFeedUrl(-getCurrentDayIndex() + 7);
-			DownloadRssTask task = new DownloadRssTask();
-			Diet diet = task.execute(firstWeekFeedUrl, secondWeekFeedUrl).get();
-			return diet;
-		} catch (Exception e) {
-			showToast(e.getMessage());
-			return new Diet();
-		}
-	}
-
-	/**
-	 * Updates the saved/display diet using the SWFR RSS.
-	 * 
-	 * @see DownloadRssTask#parseRss(InputStream)
-	 */
-	protected void updateDiet() {
-		Diet fetchedDiet = fetchDiet();
-		if (fetchedDiet == null) {
-			showToast(getString(R.string.error_diet_fetch));
-		} else {
-			diet = fetchedDiet;
-			refreshView();
-			showToast(getString(R.string.text_diet_synced));
-		}
-
 	}
 
 	/**
@@ -145,7 +94,7 @@ public class MainActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_sync:
-			updateDiet();
+			refresh();
 			return true;
 		case R.id.menu_about:
 			String version = "-";
@@ -171,6 +120,22 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	public DayPagerAdapter getDayPagerAdapter() {
+		return dayPagerAdapter;
+	}
+	
+	public ViewPager getViewPager() {
+		return viewPager;
+	}
+	
+	public void setDiet(Diet diet) {
+		this.diet = diet;
+	}
+	
+	public Diet getDiet() {
+		return diet;
+	}
+	
 	/**
 	 * Shows a toast notification.
 	 */

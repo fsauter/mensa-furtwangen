@@ -1,13 +1,11 @@
 package de.rentoudu.mensa;
 
-import android.content.DialogInterface;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.RatingBar;
-import android.widget.Toast;
 
 import com.google.api.services.ratings.model.Rating;
 
