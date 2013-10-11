@@ -32,40 +32,47 @@ public class DayFragment extends Fragment {
     	
     	TextView notes = (TextView) view.findViewById(R.id.notes);
     	
+    	// Ratings bars.
+    	RatingBar menuOneRatingBar = (RatingBar) view.findViewById(R.id.menuOne_ratingBar);
+    	RatingBar menuTwoRatingBar = (RatingBar) view.findViewById(R.id.menuTwo_ratingBar);
+    	
     	Day day = (Day) getArguments().get("day");
     	Menu menuOne = day.getMenuOne();
     	Menu menuTwo = day.getMenuTwo();
     	
-    	menuOneAppetizer.setText(menuOne.getAppetizer());
-    	menuOneSideDish.setText(menuOne.getSideDish());
     	if(menuOne.getMainCourse() == "") {
+    		menuOneAppetizer.setText("");
     		menuOnemainCourse.setText(getString(R.string.text_menu_no_offer));
+        	menuOneSideDish.setText("");
+        	menuOneRatingBar.setVisibility(View.INVISIBLE);
     	} else {
+    		// Menu one
+    		menuOneAppetizer.setText(menuOne.getAppetizer());
     		menuOnemainCourse.setText(menuOne.getMainCourse());
+        	menuOneSideDish.setText(menuOne.getSideDish());
+    		// Rating bar menu one
+        	menuOneRatingBarController = new RatingBarController(this, menuOneRatingBar, menuOne);
+        	menuOneRatingBar.setOnTouchListener(menuOneRatingBarController);
+        	menuOneRatingBarController.refresh();
     	}
     	
-    	menuTwoAppetizer.setText(menuTwo.getAppetizer());
-    	menuTwoSideDish.setText(menuTwo.getSideDish());
     	if(menuTwo.getMainCourse() == "") {
+    		menuTwoAppetizer.setText("");
     		menuTwomainCourse.setText(getString(R.string.text_menu_no_offer));
+    		menuTwoSideDish.setText("");
+    		menuTwoRatingBar.setVisibility(View.INVISIBLE);
     	} else {
+    		// Menu two
+    		menuTwoAppetizer.setText(menuTwo.getAppetizer());
     		menuTwomainCourse.setText(menuTwo.getMainCourse());
+        	menuTwoSideDish.setText(menuTwo.getSideDish());
+    		// Rating bar menu two
+        	menuTwoRatingBarController = new RatingBarController(this, menuTwoRatingBar, menuTwo);
+        	menuTwoRatingBar.setOnTouchListener(menuTwoRatingBarController);
+        	menuTwoRatingBarController.refresh();
     	}
     	
     	notes.setText(day.getNotes());
-    	
-    	// Rating bar
-    	RatingBar menuOneRatingBar = (RatingBar) view.findViewById(R.id.menuOne_ratingBar);
-    	RatingBar menuTwoRatingBar = (RatingBar) view.findViewById(R.id.menuTwo_ratingBar);
-    	
-    	menuOneRatingBarController = new RatingBarController(this, menuOneRatingBar, menuOne);
-    	menuTwoRatingBarController = new RatingBarController(this, menuTwoRatingBar, menuTwo);
-    	
-    	menuOneRatingBar.setOnTouchListener(menuOneRatingBarController);
-    	menuTwoRatingBar.setOnTouchListener(menuTwoRatingBarController);
-    	
-    	menuOneRatingBarController.refresh();
-    	menuTwoRatingBarController.refresh();
     	
         return view;
     }
