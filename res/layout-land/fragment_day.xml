@@ -27,8 +27,9 @@
 		        android:layout_height="wrap_content"
 		        android:layout_weight="1"
 		        android:background="#EEEEEE"
-		        android:orientation="vertical" 
+		        android:orientation="vertical"
 			    android:layout_margin="10dp"
+			    android:minHeight="130dp"
 		        android:padding="10dp" >
 			
 		        <LinearLayout
@@ -93,6 +94,7 @@
 		        android:background="#EEEEEE"
 		        android:orientation="vertical" 
 			    android:layout_margin="10dp"
+			    android:minHeight="130dp"
 		        android:padding="10dp" >
 			    
 		         <LinearLayout

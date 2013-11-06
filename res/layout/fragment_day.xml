@@ -3,15 +3,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	        android:id="@+id/day_scollview"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:background="#FFFFFF" >
+	        android:layout_height="match_parent" >
 	        
 	<LinearLayout
 	    android:id="@+id/day_menu_container"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:orientation="vertical"
-	    android:background="#FFFFFF" >
+	    android:orientation="vertical">
 	    
 	    <LinearLayout
 		    android:id="@+id/menuOne_container"
@@ -140,13 +138,14 @@
 		</LinearLayout>
 	    
 	    <TextView
-	        android:id="@+id/notes"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:layout_margin="10dp"
-		    android:textSize="12sp"
-		    android:textStyle="italic"
-		    android:text="@string/text_empty"
-		    android:textColor="#2D2D2D" />
+		        android:id="@+id/notes"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_margin="10dp"
+			    android:textSize="12sp"
+			    android:textStyle="italic"
+			    android:text="@string/text_empty"
+			    android:textColor="#2D2D2D" />
 	</LinearLayout>
+	
 </ScrollView>

@@ -44,7 +44,7 @@ public class DietFetchTask extends AsyncTask<String, Void, Diet> {
 	@Override
 	protected Diet doInBackground(String... urls) {
 		
-		startNotification(); // Ends in onPostExecute(..)
+		startDietFetchNotification(); // Ends in onPostExecute(..)
 		
 		try {
 			InputStream firstWeekStream = fetchRss(urls[0]);
@@ -70,10 +70,10 @@ public class DietFetchTask extends AsyncTask<String, Void, Diet> {
 	@Override
 	protected void onPostExecute(Diet result) {
 		if(result == null) {
-			endNotification(false);
+			endDietFetchNotification(false);
 		} else {
-			getActivity().update(result);
-			endNotification(true);
+			getActivity().updateDietAndView(result);
+			endDietFetchNotification(true);
 		}
 	}
 	
@@ -177,18 +177,18 @@ public class DietFetchTask extends AsyncTask<String, Void, Diet> {
 		return stream;
 	}
 	
-	public void startNotification() {
+	private void startDietFetchNotification() {
 		Intent intent = new Intent(getActivity(), MainActivity.class);
 		PendingIntent pIntent = PendingIntent.getActivity(getActivity(), 0, intent, 0);
 		notificationBuilder.setContentIntent(pIntent);
 		notificationBuilder.setContentTitle(getActivity().getString(R.string.notification_updating_menu_title))
 				.setContentText(getActivity().getString(R.string.notification_updating_menu_text))
-				.setSmallIcon(R.drawable.ic_notification_sync)
+				.setSmallIcon(R.drawable.ic_action_refresh_dark)
 				.setProgress(0, 0, true);
 		notificationManager.notify(0, notificationBuilder.build());
 	}
 	
-	public void endNotification(boolean success) {
+	private void endDietFetchNotification(boolean success) {
 		notificationManager.cancel(0);
 		if(success) {
 			//getActivity().showToast(getActivity().getString(R.string.text_diet_synced));

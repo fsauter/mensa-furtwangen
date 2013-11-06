@@ -35,6 +35,18 @@ public class Utils {
 		return formattedDate;
 	}
 	
+	public static long getNow() {
+		return getCalendar().getTimeInMillis();
+	}
+	
+	public static long getMilliseconds(int hour, int minute) {
+		Calendar calendar = getCalendar();
+		calendar.set(Calendar.HOUR_OF_DAY, hour);
+		calendar.set(Calendar.MINUTE, minute);
+		calendar.set(Calendar.SECOND, 0);
+		return calendar.getTimeInMillis();
+	}
+	
 	public static boolean isAfter(int hour, int minute) {
 		Calendar calendar = getCalendar();
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -43,6 +55,16 @@ public class Utils {
 		Date closingDate = calendar.getTime();
 		Date currentDate = new Date();
 		return currentDate.after(closingDate);
+	}
+	
+	public static boolean isBefore(int hour, int minute) {
+		Calendar calendar = getCalendar();
+		calendar.set(Calendar.HOUR_OF_DAY, hour);
+		calendar.set(Calendar.MINUTE, minute);
+		calendar.set(Calendar.SECOND, 0);
+		Date openingDate = calendar.getTime();
+		Date currentDate = new Date();
+		return currentDate.before(openingDate);
 	}
 	
 	public static Calendar getCalendar() {

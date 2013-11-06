@@ -11,6 +11,7 @@
     <string name="weekday_fr">Friday</string>
     
     <string name="menu_about">About</string>
+    <string name="menu_today">Today</string>
     <string name="menu_sync">Sync</string>
     <string name="menu_settings">Settings</string>
     
@@ -22,6 +23,8 @@
     <string name="text_about"><b>\u00A9 Florian Sauter 2013</b>\nSoftware Product Management\nFurtwangen University\nData provided by SWFR.\nVersion: <b>%1$s</b></string>
     <string name="text_diet_synced">Menu has been updated.</string>
     <string name="text_diet_fetch">Fetching menu&#8230;</string>
+    <string name="text_closed">Closed</string>
+    <string name="text_opening_hours">11:25 am &#8211; 01:40 pm</string>
     <string name="text_empty">-</string>
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>

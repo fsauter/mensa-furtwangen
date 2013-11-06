@@ -1,14 +1,21 @@
 package de.rentoudu.mensa;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 import de.rentoudu.mensa.model.Diet;
 import de.rentoudu.mensa.task.DietFetchTask;
@@ -34,9 +41,19 @@ public class MainActivity extends FragmentActivity {
 	private ViewPager viewPager;
 
 	/**
-	 * The fetched activity diet.
+	 * The current activity diet.
 	 */
-	private Diet diet;
+	private Diet currentDiet;
+	
+	/**
+	 * Opening time in german format
+	 */
+	private int[] openingTime = {11, 25};
+	
+	/**
+	 * Closing time in german format
+	 */
+	private int[] closingTime = {13, 40};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,32 +63,58 @@ public class MainActivity extends FragmentActivity {
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		dayPagerAdapter = new DayPagerAdapter(getResources(), getSupportFragmentManager());
 		
-		refresh();
+		initializeOpeningHours();
+		
+		if(savedInstanceState != null && savedInstanceState.containsKey("diet")) {
+			// Reuse already fetched diet.
+			Diet savedDiet = (Diet) savedInstanceState.getSerializable("diet");
+			updateDietAndView(savedDiet);
+		} else {
+			// Starts async fetching task.
+			refreshDiet();
+		}
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		// Remember the fetched diet for restoring in #onCreate.
+		outState.putSerializable("diet", currentDiet);
 	}
 
 	/**
-	 * Returns the current day index.
+	 * Returns the current day index (using closing hours).
 	 */
-	protected int getCurrentDayIndex() {
+	protected int getCurrentCanteenDayIndex() {
 		// by default -2 because an we want to start counting with 0
 		int dateBalancer = -2;
-		// Have a look at the closing date.
+		// Have a look at the closing hours
 		if (Utils.isAfter(13, 40)) {
 			dateBalancer = -1;
 		}
 		return Utils.getDay() + dateBalancer;
 	}
 	
-	public void refresh() {
-		String firstWeekFeedUrl = buildFeedUrl(-getCurrentDayIndex());
-		String secondWeekFeedUrl = buildFeedUrl(-getCurrentDayIndex() + 7);
+	/**
+	 * Returns the current day index.
+	 */
+	protected int getCurrentDayIndex() {
+		// by default -2 because an we want to start counting with 0
+		int dateBalancer = -2;
+		return Utils.getDay() + dateBalancer;
+	}
+	
+	public void refreshDiet() {
+		String firstWeekFeedUrl = buildFeedUrl(-getCurrentCanteenDayIndex());
+		String secondWeekFeedUrl = buildFeedUrl(-getCurrentCanteenDayIndex() + 7);
 		new DietFetchTask(this).execute(firstWeekFeedUrl, secondWeekFeedUrl);
 	}
 	
-	public void update(Diet diet) {
+	public void updateDietAndView(Diet diet) {
+		this.currentDiet = diet;
 		dayPagerAdapter.setDiet(diet);
 		viewPager.setAdapter(dayPagerAdapter);
-		viewPager.setCurrentItem(getCurrentDayIndex());
+		viewPager.setCurrentItem(getCurrentCanteenDayIndex());
 	}
 
 	/**
@@ -93,47 +136,65 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_sync:
-			refresh();
-			return true;
-		case R.id.menu_about:
-			String version = "-";
-			try {
-				PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-				version = packageInfo.versionName;
-			} catch (NameNotFoundException e) {
-				// Nothing to do.
-			}
-			String message = String.format(getString(R.string.text_about), version);
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(message)
-				.setTitle(R.string.menu_about)
-				.setNeutralButton(android.R.string.ok,
-		            new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							dialog.cancel();
-						}
-				}).create().show();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+			case R.id.menu_today:
+				goToToday();
+				break;
+			case R.id.menu_sync:
+				refreshDiet();
+				break;
+			case R.id.menu_about:
+				showAboutMenu();
+				break;
 		}
+		return true;
 	}
 
+	private void goToToday() {
+		viewPager.setCurrentItem(getCurrentDayIndex());
+	}
+
+	private void showAboutMenu() {
+		String version = "-";
+		try {
+			PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			version = packageInfo.versionName;
+		} catch (NameNotFoundException e) {
+			// Nothing to do.
+		}
+		String message = String.format(getString(R.string.text_about), version);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(message).setTitle(R.string.menu_about)
+			.setNeutralButton(android.R.string.ok,
+	            new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				}
+			).create().show();
+	}
+	
+	private void initializeOpeningHours() {
+		final TextView countdown = (TextView) findViewById(R.id.opening_countdown);
+		if(Utils.isAfter(openingTime[0], openingTime[1]) && Utils.isBefore(closingTime[0], closingTime[1])) {
+			new CountDownTimer(Utils.getMilliseconds(closingTime[0], closingTime[1]) - Utils.getNow(), 1000) {
+				public void onTick(long millisUntilFinished) {
+					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+					String time = sdf.format(new Date(millisUntilFinished - TimeZone.getDefault().getRawOffset()));
+					countdown.setText(time);
+				}
+				public void onFinish() {
+					countdown.setText(R.string.text_closed);
+				}
+			}.start();
+		}
+	}
+	
 	public DayPagerAdapter getDayPagerAdapter() {
 		return dayPagerAdapter;
 	}
 	
 	public ViewPager getViewPager() {
 		return viewPager;
-	}
-	
-	public void setDiet(Diet diet) {
-		this.diet = diet;
-	}
-	
-	public Diet getDiet() {
-		return diet;
 	}
 	
 	/**
@@ -143,6 +204,9 @@ public class MainActivity extends FragmentActivity {
 		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 	}
 
+	/**
+	 * Prints a log message (mainly for LogCat)
+	 */
 	protected void log(String message) {
 		// Log.v(getClass().getSimpleName(), message);
 	}
