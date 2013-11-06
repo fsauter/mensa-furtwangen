@@ -11,6 +11,7 @@
     <string name="weekday_fr">Freitag</string>
     
     <string name="menu_about">About</string>
+    <string name="menu_today">Heute</string>
     <string name="menu_sync">Sync</string>
     <string name="menu_settings">Settings</string>
     
@@ -22,6 +23,8 @@
     <string name="text_about">\u00A9 Florian Sauter 2013\nSoftware Produktmanagement\nHochschule Furtwangen\nDaten von SWFR.\nVersion: <b>%1$s</b></string>
     <string name="text_diet_synced">Speiseplan wurde aktualisiert.</string>
     <string name="text_diet_fetch">Aktualisiere Speiseplan&#8230;</string>
+    <string name="text_closed">Geschlossen</string>
+    <string name="text_opening_hours">11:25 &#8211; 13:40 Uhr</string>
     <string name="text_empty">-</string>
     <string name="text_ok">OK</string>
     <string name="text_cancel">Abbrechen</string>
