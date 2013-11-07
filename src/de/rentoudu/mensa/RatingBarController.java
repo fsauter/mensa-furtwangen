@@ -1,5 +1,6 @@
 package de.rentoudu.mensa;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.MotionEvent;
@@ -16,11 +17,11 @@ import de.rentoudu.mensa.task.RatingInsertTask;
 
 public class RatingBarController implements OnTouchListener, RatingBarDialogListener {
 	
-	private DayFragment activeFragment;
+	private Fragment activeFragment;
 	private RatingBar activeRatingBar;
 	private Menu activeMenu;
 	
-	public RatingBarController(DayFragment fragment, RatingBar ratingBar, Menu menu) {
+	public RatingBarController(Fragment fragment, RatingBar ratingBar, Menu menu) {
 		this.activeFragment = fragment;
 		this.activeRatingBar = ratingBar;
 		this.activeMenu = menu;

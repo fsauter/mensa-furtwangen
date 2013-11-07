@@ -1,6 +1,8 @@
 package de.rentoudu.mensa.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class Day implements Serializable {
@@ -11,12 +13,13 @@ public class Day implements Serializable {
 	private String title;
 	private String guid;
 	
-	private Menu menuOne;
-	private Menu menuTwo;
+	private List<Menu> menus;
 	
 	private String notes;
 	
-	public Day() {}
+	public Day() {
+		this.menus = new ArrayList<Menu>();
+	}
 	
 	public void setWeek(int week) {
 		this.week = week;
@@ -34,20 +37,16 @@ public class Day implements Serializable {
 		return day;
 	}
 	
-	public void setMenuOne(Menu menuOne) {
-		this.menuOne = menuOne;
+	public void addMenu(Menu menu) {
+		menus.add(menu);
 	}
 	
-	public void setMenuTwo(Menu menuTwo) {
-		this.menuTwo = menuTwo;
+	public List<Menu> getMenus() {
+		return menus;
 	}
 	
-	public Menu getMenuOne() {
-		return menuOne;
-	}
-	
-	public Menu getMenuTwo() {
-		return menuTwo;
+	public boolean hasMenus() {
+		return menus.isEmpty() == false;
 	}
 	
 	public void setNotes(String notes) {

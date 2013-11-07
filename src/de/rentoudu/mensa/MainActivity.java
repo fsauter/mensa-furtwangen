@@ -63,7 +63,7 @@ public class MainActivity extends FragmentActivity {
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		dayPagerAdapter = new DayPagerAdapter(getResources(), getSupportFragmentManager());
 		
-		initializeOpeningHours();
+		initializeOpeningCountdown();
 		
 		if(savedInstanceState != null && savedInstanceState.containsKey("diet")) {
 			// Reuse already fetched diet.
@@ -173,7 +173,8 @@ public class MainActivity extends FragmentActivity {
 			).create().show();
 	}
 	
-	private void initializeOpeningHours() {
+	private void initializeOpeningCountdown() {
+		//TODO: Only monday to friday
 		final TextView countdown = (TextView) findViewById(R.id.opening_countdown);
 		if(Utils.isAfter(openingTime[0], openingTime[1]) && Utils.isBefore(closingTime[0], closingTime[1])) {
 			new CountDownTimer(Utils.getMilliseconds(closingTime[0], closingTime[1]) - Utils.getNow(), 1000) {

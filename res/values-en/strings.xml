@@ -15,10 +15,10 @@
     <string name="menu_sync">Sync</string>
     <string name="menu_settings">Settings</string>
     
-    <string name="text_header_menu_1">Menu 1</string>
-    <string name="text_header_menu_2">Menu 2</string>
+    <string name="text_header_menu_one">Menu 1</string>
+    <string name="text_header_menu_two">Menu 2</string>
     
-    <string name="text_menu_no_offer">No offer.</string>
+    <string name="text_menu_no_offer">No offer today, sry...</string>
     
     <string name="text_about"><b>\u00A9 Florian Sauter 2013</b>\nSoftware Product Management\nFurtwangen University\nData provided by SWFR.\nVersion: <b>%1$s</b></string>
     <string name="text_diet_synced">Menu has been updated.</string>

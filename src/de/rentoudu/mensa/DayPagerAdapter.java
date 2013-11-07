@@ -3,6 +3,7 @@ package de.rentoudu.mensa;
 import java.util.Calendar;
 import java.util.Locale;
 
+import de.rentoudu.mensa.fragment.DayFragment;
 import de.rentoudu.mensa.model.Day;
 import de.rentoudu.mensa.model.Diet;
 
@@ -10,13 +11,18 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 /**
- * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+ * A {@link FragmentStatePagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
+ * 
+ * FragmentPagerAdapter caused problems with fragments inside our DayFragment,
+ * so we're using the FragmentStatePagerAdapter. This means when pages are not
+ * visible to the user, their entire fragment may be destroyed, only keeping the
+ * saved state of that fragment.
  */
-public class DayPagerAdapter extends FragmentPagerAdapter {
+public class DayPagerAdapter extends FragmentStatePagerAdapter {
 
 	private Resources resources;
 	private Diet diet;

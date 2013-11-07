@@ -5,12 +5,21 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Menu implements Serializable {
 	
+	public String title;
 	public String appetizer;
 	public String mainCourse;
 	public String sideDish;
  
 	public Menu() {}
-
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	
 	public String getAppetizer() {
 		return appetizer;
 	}

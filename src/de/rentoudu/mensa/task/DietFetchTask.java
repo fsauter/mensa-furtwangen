@@ -28,6 +28,10 @@ import de.rentoudu.mensa.model.Day;
 import de.rentoudu.mensa.model.Diet;
 import de.rentoudu.mensa.model.Menu;
 
+/**
+ * When I wrote this, only God and I understood what I was doing
+ * Now, God only knows
+ */
 public class DietFetchTask extends AsyncTask<String, Void, Diet> {
 
 	private NotificationCompat.Builder notificationBuilder;
@@ -114,6 +118,9 @@ public class DietFetchTask extends AsyncTask<String, Void, Diet> {
 			// Parse the menu strings
 			Menu menuOne = parseMenu(menuOneString);
 			Menu menuTwo = parseMenu(menuTwoString);
+			
+			menuOne.setTitle(getActivity().getString(R.string.text_header_menu_one));
+			menuTwo.setTitle(getActivity().getString(R.string.text_header_menu_two));
 
 			Day day = new Day();
 			if(isSecondWeek) {
@@ -122,8 +129,14 @@ public class DietFetchTask extends AsyncTask<String, Void, Diet> {
 				day.setWeek(currentWeek);
 			}
 			day.setDay(i + 2); // index equals Calender.DAYXX + 2
-			day.setMenuOne(menuOne);
-			day.setMenuTwo(menuTwo);
+			
+			// No main course.. no menu!
+			if(menuOne.getMainCourse() != "") 
+				day.addMenu(menuOne);
+			
+			if(menuTwo.getMainCourse() != "") 
+				day.addMenu(menuTwo);
+			
 			day.setNotes(notes);
 			day.setTitle(title);
 			day.setGuid(guid);

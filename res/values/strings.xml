@@ -15,10 +15,10 @@
     <string name="menu_sync">Sync</string>
     <string name="menu_settings">Settings</string>
     
-    <string name="text_header_menu_1">Menü 1</string>
-    <string name="text_header_menu_2">Menü 2</string>
+    <string name="text_header_menu_one">Menü 1</string>
+    <string name="text_header_menu_two">Menü 2</string>
     
-    <string name="text_menu_no_offer">Kein Angebot.</string>
+    <string name="text_menu_no_offer">Kein Angebot heute, sry...</string>
     
     <string name="text_about">\u00A9 Florian Sauter 2013\nSoftware Produktmanagement\nHochschule Furtwangen\nDaten von SWFR.\nVersion: <b>%1$s</b></string>
     <string name="text_diet_synced">Speiseplan wurde aktualisiert.</string>
