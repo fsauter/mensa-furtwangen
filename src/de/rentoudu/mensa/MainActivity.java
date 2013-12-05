@@ -1,21 +1,14 @@
 package de.rentoudu.mensa;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 import de.rentoudu.mensa.model.Diet;
 import de.rentoudu.mensa.task.DietFetchTask;
@@ -48,12 +41,12 @@ public class MainActivity extends FragmentActivity {
 	/**
 	 * Opening time in german format
 	 */
-	private int[] openingTime = {11, 25};
+	public static int[] openingTime = {11, 25};
 	
 	/**
 	 * Closing time in german format
 	 */
-	private int[] closingTime = {13, 40};
+	public static int[] closingTime = {13, 40};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +55,6 @@ public class MainActivity extends FragmentActivity {
 		
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		dayPagerAdapter = new DayPagerAdapter(getResources(), getSupportFragmentManager());
-		
-		initializeOpeningCountdown();
 		
 		if(savedInstanceState != null && savedInstanceState.containsKey("diet")) {
 			// Reuse already fetched diet.
@@ -89,7 +80,7 @@ public class MainActivity extends FragmentActivity {
 		// by default -2 because an we want to start counting with 0
 		int dateBalancer = -2;
 		// Have a look at the closing hours
-		if (Utils.isAfter(13, 40)) {
+		if (Utils.isAfter(closingTime[0], closingTime[1])) {
 			dateBalancer = -1;
 		}
 		return Utils.getDay() + dateBalancer;
@@ -171,23 +162,6 @@ public class MainActivity extends FragmentActivity {
 					}
 				}
 			).create().show();
-	}
-	
-	private void initializeOpeningCountdown() {
-		//TODO: Only monday to friday
-		final TextView countdown = (TextView) findViewById(R.id.opening_countdown);
-		if(Utils.isAfter(openingTime[0], openingTime[1]) && Utils.isBefore(closingTime[0], closingTime[1])) {
-			new CountDownTimer(Utils.getMilliseconds(closingTime[0], closingTime[1]) - Utils.getNow(), 1000) {
-				public void onTick(long millisUntilFinished) {
-					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-					String time = sdf.format(new Date(millisUntilFinished - TimeZone.getDefault().getRawOffset()));
-					countdown.setText(time);
-				}
-				public void onFinish() {
-					countdown.setText(R.string.text_closed);
-				}
-			}.start();
-		}
 	}
 	
 	public DayPagerAdapter getDayPagerAdapter() {

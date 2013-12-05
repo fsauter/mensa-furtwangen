@@ -1,5 +1,6 @@
-package de.rentoudu.mensa;
+package de.rentoudu.mensa.fragment;
 
+import de.rentoudu.mensa.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;

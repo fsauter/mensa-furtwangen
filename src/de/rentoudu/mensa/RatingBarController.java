@@ -10,7 +10,8 @@ import android.widget.RatingBar;
 
 import com.google.api.services.ratings.model.Rating;
 
-import de.rentoudu.mensa.RatingBarDialogFragment.RatingBarDialogListener;
+import de.rentoudu.mensa.fragment.RatingBarDialogFragment;
+import de.rentoudu.mensa.fragment.RatingBarDialogFragment.RatingBarDialogListener;
 import de.rentoudu.mensa.model.Menu;
 import de.rentoudu.mensa.task.RatingFetchTask;
 import de.rentoudu.mensa.task.RatingInsertTask;
