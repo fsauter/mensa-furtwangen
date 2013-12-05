@@ -4,8 +4,8 @@
 	        android:id="@+id/day_scrollview"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent">
-
-	<LinearLayout
+	        
+    <LinearLayout
 	    android:id="@+id/day_container"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
 		    android:id="@+id/day_menu_container"
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
-		    android:orientation="vertical">
+		    android:orientation="horizontal">
 			<!-- Menus etc. -->
 		</LinearLayout>
 		<!-- Notes etc. -->
