@@ -53,7 +53,7 @@ public class DayFragment extends Fragment {
 	}
 	
 	private void processEmptyView(LinearLayout container) {
-		EmptyFragment fragment = new EmptyFragment();
+		EmptyMenuFragment fragment = new EmptyMenuFragment();
 		FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
     	fragmentTransaction.add(container.getId(), fragment, "empty");
     	fragmentTransaction.commit();
