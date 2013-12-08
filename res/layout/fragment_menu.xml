@@ -8,7 +8,7 @@
     android:layout_marginTop="10dp"
     android:background="@drawable/bg_card"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="10dp" >
 
     <LinearLayout
         android:id="@+id/menu_header_container"
@@ -18,21 +18,13 @@
 
         <TextView
             android:id="@+id/menu_title"
+            style="@style/MenuHeaderFont"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/text_empty"
             android:textColor="#3f3f3f"
             android:textStyle="bold" />
-
-        <RatingBar
-            android:id="@+id/menu_ratingBar"
-            style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:numStars="5"
-            android:stepSize="1.0" />
     </LinearLayout>
 
     <View

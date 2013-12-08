@@ -18,7 +18,7 @@
     <string name="text_header_menu_one">Menu 1</string>
     <string name="text_header_menu_two">Menu 2</string>
     
-    <string name="text_menu_no_offer">No offer today, sry...</string>
+    <string name="text_menu_no_offer">No offer today, sry&#8230;</string>
     
     <string name="text_about"><b>\u00A9 Florian Sauter 2013</b>\nSoftware Product Management\nFurtwangen University\nData provided by SWFR.\nVersion: <b>%1$s</b></string>
     <string name="text_diet_synced">Menu has been updated.</string>
@@ -31,6 +31,9 @@
     
     <string name="rating_header">Rate this menu</string>
     <string name="rating_insert_failed">Could not save your rating, sry.</string>
+    <string name="rating_value_default">0</string>
+    <string name="rating_description_good">I like this</string>
+    <string name="rating_description_bad">I dislike this</string>
     <string name="rating_5">Excellent</string>
     <string name="rating_4">Above Average</string>
     <string name="rating_3">Average</string>

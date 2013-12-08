@@ -8,8 +8,10 @@ import com.google.api.services.ratings.model.TotalMenuRatingQuery;
 
 import de.rentoudu.mensa.RatingBarController;
 
+/**
+ * This task fetches the total rating count for a specific menu.
+ */
 public class RatingFetchTask extends RatingTask<Void, Void, Rating>{
-
 
 	public RatingFetchTask(RatingBarController controller) {
 		super(controller);

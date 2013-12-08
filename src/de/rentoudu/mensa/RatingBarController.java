@@ -10,13 +10,11 @@ import android.widget.RatingBar;
 
 import com.google.api.services.ratings.model.Rating;
 
-import de.rentoudu.mensa.fragment.RatingBarDialogFragment;
-import de.rentoudu.mensa.fragment.RatingBarDialogFragment.RatingBarDialogListener;
 import de.rentoudu.mensa.model.Menu;
 import de.rentoudu.mensa.task.RatingFetchTask;
 import de.rentoudu.mensa.task.RatingInsertTask;
 
-public class RatingBarController implements OnTouchListener, RatingBarDialogListener {
+public class RatingBarController implements OnTouchListener {
 	
 	private Fragment activeFragment;
 	private RatingBar activeRatingBar;
@@ -34,26 +32,10 @@ public class RatingBarController implements OnTouchListener, RatingBarDialogList
 	public void refresh() {
 		new RatingFetchTask(this).execute();
 	}
-	
-	@Override
-	public void onDialogPositiveClick(int rating) {
-		if(rating > 0 && rating < 6) {
-			// Build rating.
-			Rating userRating = new Rating();
-			userRating.setDeviceId(Utils.getDeviceId());
-			userRating.setMenuId(getActiveMenu().getMainCourse().toString());
-			userRating.setRatingScore((double) rating);
-			// Persist rating.
-			new RatingInsertTask(this).execute(userRating);
-		}
-	}
 
 	@Override
 	public boolean onTouch(View view, MotionEvent event) {
 		if(getFragmentManager().findFragmentByTag("RatingDialogFragment") == null) {
-			RatingBarDialogFragment ratingDialog = new RatingBarDialogFragment();
-			ratingDialog.show(getFragmentManager(), "RatingDialogFragment");
-			ratingDialog.setRatingBarDialogListener(this);
 		}
 		return true;
 	}
