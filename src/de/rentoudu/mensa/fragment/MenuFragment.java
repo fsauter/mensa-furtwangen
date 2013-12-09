@@ -1,7 +1,6 @@
 package de.rentoudu.mensa.fragment;
 
 import de.rentoudu.mensa.R;
-import de.rentoudu.mensa.fragment.RatingFragment.ThumbState;
 import de.rentoudu.mensa.model.Menu;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,9 +32,12 @@ public class MenuFragment extends Fragment {
 		menumainCourse.setText(menu.getMainCourse());
     	menuSideDish.setText(menu.getSideDish());
 		
-    	// Rating bar
+    	// Thumbs rating
     	if(savedInstanceState == null) {
-    		RatingFragment ratingFragment = RatingFragment.fromRating(ThumbState.UP, 12, 5);
+    		RatingFragment ratingFragment = new RatingFragment();
+    		Bundle bundle = new Bundle();
+    		bundle.putString("menuId", menu.getId());
+    		ratingFragment.setArguments(bundle);
     		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
     		transaction.add(R.id.menu_header_container, ratingFragment).commit();
     	}
