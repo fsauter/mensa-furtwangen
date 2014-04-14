@@ -3,7 +3,6 @@ package de.rentoudu.mensa.fragment;
 import java.io.Serializable;
 
 import com.appspot.mensa_furtwangen.thumbs.model.Thumb;
-import com.appspot.mensa_furtwangen.thumbs.model.ThumbsQuery;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,8 +19,10 @@ import de.rentoudu.mensa.task.ThumbsFetchTask;
 
 /**
  * This fragments represents the rating of a menu.
+ * 
+ * <p>The thumb ratings will be fetched after the view has been created ({@link #onViewCreated(View, Bundle)}.</p>
  */
-public class RatingFragment extends Fragment implements OnClickListener {
+public class ThumbsFragment extends Fragment implements OnClickListener {
 
 	private ThumbState currentState;
 	private String menuId;
@@ -43,7 +44,7 @@ public class RatingFragment extends Fragment implements OnClickListener {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		// Start asynchronous rating fetch task.
-		new ThumbsFetchTask(this).execute(menuId, Utils.getDeviceId());
+		new ThumbsFetchTask(this).execute(Utils.getDeviceId(), menuId);
 	}
 	
 	@Override
@@ -57,12 +58,20 @@ public class RatingFragment extends Fragment implements OnClickListener {
 		}
 	}
 	
-	private TextView getThumbUp() {
-		return (TextView) getView().findViewById(R.id.rating_thumb_up);
+	public boolean isThumbsViewInitialized() {
+		return getView() != null; 
 	}
 	
-	private TextView getThumbDown() {
-		return (TextView) getView().findViewById(R.id.rating_thumb_down);
+	private TextView getThumbUpView() {
+		View view = getView();
+		View thumbView = view.findViewById(R.id.rating_thumb_up);
+		return (TextView) thumbView;
+	}
+	
+	private TextView getThumbDownView() {
+		View view = getView();
+		View thumbView = view.findViewById(R.id.rating_thumb_down);
+		return (TextView) thumbView;
 	}
 	
 	/**
@@ -72,11 +81,16 @@ public class RatingFragment extends Fragment implements OnClickListener {
 	 * @param count
 	 */
 	public void setThumbCount(ThumbState thumbState, int count) {
+		if(isThumbsViewInitialized() == false) {
+			// Small quick fix for some crazy errors (R.id.rating_thumb_up is null..)
+			return;
+		}
+
 		if(ThumbState.UP.equals(thumbState)) {
-			TextView thumbUpView = getThumbUp();
+			TextView thumbUpView = getThumbUpView();
 			thumbUpView.setText(String.valueOf(count));
 		} else if (ThumbState.DOWN.equals(thumbState)) {
-			TextView thumbDownView = getThumbDown();
+			TextView thumbDownView = getThumbDownView();
 			thumbDownView.setText(String.valueOf(count));
 		} else {
 			// Nothing to do.
@@ -92,12 +106,31 @@ public class RatingFragment extends Fragment implements OnClickListener {
 	 */
 	private int getThumbCount(ThumbState thumbState) {
 		if(ThumbState.UP.equals(thumbState)) {
-			return Integer.parseInt(getThumbUp().getText().toString());
+			return Integer.parseInt(getThumbUpView().getText().toString());
 		} else if (ThumbState.DOWN.equals(thumbState)) {
-			return Integer.parseInt(getThumbDown().getText().toString());
+			return Integer.parseInt(getThumbDownView().getText().toString());
 		} else {
 			return 0;
 		}
+	}
+	
+	/**
+	 * Sets a new state and ignores counting (useful for initializing).
+	 * 
+	 * @param newState or null for no state.
+	 */
+	public void setThumb(ThumbState newState) {
+		if(isThumbsViewInitialized() == false) {
+			// Small quick fix for some crazy errors (R.id.rating_thumb_up is null..)
+			return;
+		}
+		
+		if(ThumbState.UP.equals(newState)) {
+			getThumbUpView().setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_good_green, 0, 0, 0);
+		} else if(ThumbState.DOWN.equals(newState)) {
+			getThumbDownView().setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_bad_red, 0, 0, 0);
+		}
+		currentState = newState;
 	}
 	
 	/**
@@ -106,32 +139,35 @@ public class RatingFragment extends Fragment implements OnClickListener {
 	 * @param thumb pass null to reset thumbs
 	 */
 	private void updateThumb(ThumbState newState) {
-		TextView thumbUpView = getThumbUp();
-		TextView thumbDownView = getThumbDown();
+		if(isThumbsViewInitialized() == false) {
+			// Small quick fix for some crazy errors (R.id.rating_thumb_up is null..)
+			return;
+		}
+		
+		TextView thumbUpView = getThumbUpView();
+		TextView thumbDownView = getThumbDownView();
 		
 		// Disable interaction while rating
 		thumbUpView.setOnClickListener(null);
 		thumbDownView.setOnClickListener(null);
+		
+		String deviceId = Utils.getDeviceId();
 		
 		// Creating thumb model for interaction with service.
 		// Also note:
 		// There is no need to remove old thumb states on server side
 		// (getting done automatically after insert)
 		Thumb thumb = new Thumb();
-		thumb.setDeviceId(Utils.getDeviceId());
+		thumb.setDeviceId(deviceId);
 		thumb.setMenuId(menuId);
 		thumb.setState(newState.toString());
-		
-		ThumbsQuery thumbsQuery = new ThumbsQuery();
-		thumbsQuery.setDeviceId(Utils.getDeviceId());
-		thumbsQuery.setMenuId(menuId);
 		
 		// Remove thumbs (from up)
 		if(ThumbState.UP.equals(newState) && ThumbState.UP.equals(currentState)) {
 			thumbUpView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_good, 0, 0, 0);
 			setThumbCount(ThumbState.UP, getThumbCount(ThumbState.UP) - 1);
 			currentState = null;
-			new ThumbRemoveTask().execute(thumbsQuery);
+			new ThumbRemoveTask().execute(deviceId, menuId);
 			
 		// Thumb up and may remove thumb down
 		} else if (ThumbState.UP.equals(newState)) {
@@ -149,7 +185,7 @@ public class RatingFragment extends Fragment implements OnClickListener {
 			thumbDownView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_bad, 0, 0, 0);
 			setThumbCount(ThumbState.DOWN, getThumbCount(ThumbState.DOWN) - 1);
 			currentState = null;
-			new ThumbRemoveTask().execute(thumbsQuery);
+			new ThumbRemoveTask().execute(deviceId, menuId);
 			
 		// Thumb down and may remove thumb up
 		} else if (ThumbState.DOWN.equals(newState)) {
@@ -166,20 +202,6 @@ public class RatingFragment extends Fragment implements OnClickListener {
 		// Enable interaction after rating
 		thumbUpView.setOnClickListener(this);
 		thumbDownView.setOnClickListener(this);
-	}
-	
-	/**
-	 * Sets a new state and ignores counting (useful for initializing).
-	 * 
-	 * @param newState or null for no state.
-	 */
-	public void setThumb(ThumbState newState) {
-		if(ThumbState.UP.equals(newState)) {
-			getThumbUp().setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_good_green, 0, 0, 0);
-		} else if(ThumbState.DOWN.equals(newState)) {
-			getThumbDown().setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_bad_red, 0, 0, 0);
-		}
-		currentState = newState;
 	}
 	
 	public enum ThumbState implements Serializable {

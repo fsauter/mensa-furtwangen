@@ -34,7 +34,7 @@ public class MenuFragment extends Fragment {
 		
     	// Thumbs rating
     	if(savedInstanceState == null) {
-    		RatingFragment ratingFragment = new RatingFragment();
+    		ThumbsFragment ratingFragment = new ThumbsFragment();
     		Bundle bundle = new Bundle();
     		bundle.putString("menuId", menu.getId());
     		ratingFragment.setArguments(bundle);

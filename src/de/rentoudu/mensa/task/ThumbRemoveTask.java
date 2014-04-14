@@ -3,18 +3,18 @@ package de.rentoudu.mensa.task;
 import android.os.AsyncTask;
 
 import com.appspot.mensa_furtwangen.thumbs.Thumbs;
-import com.appspot.mensa_furtwangen.thumbs.model.ThumbsQuery;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.json.gson.GsonFactory;
 
-public class ThumbRemoveTask extends AsyncTask<ThumbsQuery, Void, Void> {
+import de.rentoudu.mensa.Utils;
+
+public class ThumbRemoveTask extends AsyncTask<String, Void, Void> {
 
 	@Override
-	protected Void doInBackground(ThumbsQuery... params) {
-		Thumbs.Builder thumbsBuilder = new Thumbs.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
-		Thumbs ratingService = thumbsBuilder.build();
+	protected Void doInBackground(String... params) {
+		Thumbs service = Utils.buildThumbsService();
 		try {
-			ratingService.removeThumbs(params[0]).execute();
+			String deviceId = params[0];
+			String menuId = params[1];
+			service.remove(deviceId, menuId).execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

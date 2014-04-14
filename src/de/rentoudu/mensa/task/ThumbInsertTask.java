@@ -4,17 +4,17 @@ import android.os.AsyncTask;
 
 import com.appspot.mensa_furtwangen.thumbs.Thumbs;
 import com.appspot.mensa_furtwangen.thumbs.model.Thumb;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.json.gson.GsonFactory;
+
+import de.rentoudu.mensa.Utils;
 
 public class ThumbInsertTask extends AsyncTask<Thumb, Void, Void> {
 
 	@Override
 	protected Void doInBackground(Thumb... params) {
-		Thumbs.Builder thumbsBuilder = new Thumbs.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
-		Thumbs ratingService = thumbsBuilder.build();
+		Thumbs service = Utils.buildThumbsService();
 		try {
-			ratingService.insertThumb(params[0]).execute();
+			Thumb thumb = params[0];
+			service.insert(thumb).execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

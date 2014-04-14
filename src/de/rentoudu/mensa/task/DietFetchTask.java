@@ -92,6 +92,9 @@ public class DietFetchTask extends AsyncTask<String, Void, Diet> {
 		
 		NodeList itemElements = document.getElementsByTagName("item");
 		for (int i = 0; i < 5; i++) { // NO WEEKEND DAYS (SATURDAY)
+			
+			Day day = new Day();
+			
 			Element itemElement = (Element) itemElements.item(i);
 			String title = itemElement.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
 			String guid = itemElement.getElementsByTagName("guid").item(0).getFirstChild().getNodeValue();
@@ -118,24 +121,23 @@ public class DietFetchTask extends AsyncTask<String, Void, Diet> {
 			// Parse the menu strings
 			Menu menuOne = parseMenu(menuOneString);
 			Menu menuTwo = parseMenu(menuTwoString);
-			
-			menuOne.setTitle(getActivity().getString(R.string.text_header_menu_one));
-			menuTwo.setTitle(getActivity().getString(R.string.text_header_menu_two));
 
-			Day day = new Day();
+			if(menuOne != null) {
+				menuOne.setTitle(getActivity().getString(R.string.text_header_menu_one));
+				day.addMenu(menuOne);
+			}
+			
+			if(menuTwo != null) {
+				menuTwo.setTitle(getActivity().getString(R.string.text_header_menu_two));
+				day.addMenu(menuTwo);
+			}
+			
 			if(isSecondWeek) {
 				day.setWeek(currentWeek + 1);
 			} else {
 				day.setWeek(currentWeek);
 			}
 			day.setDay(i + 2); // index equals Calender.DAYXX + 2
-			
-			// No main course.. no menu!
-			if(menuOne.getMainCourse() != "") 
-				day.addMenu(menuOne);
-			
-			if(menuTwo.getMainCourse() != "") 
-				day.addMenu(menuTwo);
 			
 			day.setNotes(notes);
 			day.setTitle(title);
@@ -148,30 +150,41 @@ public class DietFetchTask extends AsyncTask<String, Void, Diet> {
 		return diet;
 	}
 	
+	/**
+	 * Returns null if there an error occurs.
+	 * 
+	 * menuString examples:
+	 * <p>
+	 * <pre>
+	 * 	<u>Menü 2</u>; Tagessuppe;Schwarzwälder Schäufele (1);mit Zwiebelsauce;Kartoffelsalat;Grüner Bohnensalat
+	 *  <u>Menü 1</u>; Keine Ausgabe;Karfreitag
+	 *  <u>Menü 2</u>; Keine Ausgabe
+	 * </pre>
+	 * </p>
+	 */
 	protected Menu parseMenu(String menuString) {
-		String[] menuItems = menuString.split(";");
-		
 		Menu menu = new Menu();
-		menu.setAppetizer("");
-		menu.setMainCourse("");
-		menu.setSideDish("");
-		
-		if(menuItems.length > 2) { // Make sure, there is a parsable value.
-		
-			String appetizer = menuItems[1].trim();
-			String mainCourse = menuItems[2].trim();
-			String sideDish = "";
-			for(int i = 3; i < menuItems.length; i++) {
-				sideDish = sideDish.concat(", " + menuItems[i]);
+		try {
+			String[] menuItems = menuString.split(";");
+			// Make sure, there is something to parse.
+			if(menuItems.length > 2 && menuItems[1].contains("Keine Ausgabe") == false) { 
+				String appetizer = menuItems[1].trim();
+				String mainCourse = menuItems[2].trim();
+				String sideDish = "";
+				for(int i = 3; i < menuItems.length; i++) {
+					sideDish = sideDish.concat(", " + menuItems[i]);
+				}
+				sideDish = sideDish.substring(1).trim();
+				
+				menu.setAppetizer(appetizer);
+				menu.setMainCourse(mainCourse);
+				menu.setSideDish(sideDish);
+			} else {
+				menu = null;
 			}
-			sideDish = sideDish.substring(1).trim();
-			
-			menu.setAppetizer(appetizer);
-			menu.setMainCourse(mainCourse);
-			menu.setSideDish(sideDish);
-		
+		} catch(Exception e) {
+			menu = null;
 		}
-		
 		return menu;
 	}
 
